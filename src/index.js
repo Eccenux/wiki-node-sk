@@ -1,23 +1,16 @@
 import { NuxCleanupBase } from "./NuxCleanupBase.js";
+import { fixCenter } from "./fixCenter.js";
 
 // Usage example
-const endpoint = 'https://pl.wikiquote.org/w/api.php';
-const bot = new NuxCleanupBase(endpoint);
+const site = 'pl.wikiquote.org';
+const bot = new NuxCleanupBase(site);
 
 // Run the search
 (async () => {
 	await bot.init();
-	let query = {
-		action: "query",
-		list: "search",
-		srsearch: "center",
-		format: "json",		
-	};
-	let action = (response, batchNo) => {
-		console.log(`res [${batchNo}]:`, response.query);
-		throw "break";
-	}
-	await bot.search(query, action);
+
+	await fixCenter(bot);
+	
 	process.exit(0);
 })().catch(err => {
 	console.error(err);

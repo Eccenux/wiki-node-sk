@@ -5,10 +5,7 @@ module.exports = {
 		"browser": false,
 		"es2021": true,
 	},
-	"globals": {
-		"$": true,
-		"mw": true,
-	},
+	"globals": {},
 	"extends": "eslint:recommended",
 	"overrides": [{
 		"env": {
