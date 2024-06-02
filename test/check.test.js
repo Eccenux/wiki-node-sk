@@ -1,4 +1,3 @@
-// test.js
 import { assert } from 'chai';
 import { checkBracket } from '../src/check.js';
 

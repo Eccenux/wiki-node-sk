@@ -36,6 +36,8 @@ export async function fixCenter(bot) {
 }
 
 export function fixes(text) {
+	text = cleanerLinks(text);
+
 	// [[Plik:Colcoca01.jpg|mały|<center>Krzew koki]]
 	text = text.replace(/(\[\[[^\]]+?)<center>([^\]]+)/g, function(a, pre, inner){
 		inner = inner.replace(/<\/?center\/?>/, '');
@@ -47,8 +49,6 @@ export function fixes(text) {
 		
 		return `{{center|${inner}}}`;
 	});
-
-	text = cleanerLinks(text);
 
 	return text;
 }

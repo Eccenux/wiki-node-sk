@@ -4,10 +4,10 @@
  * @returns {Object} ok=true if brackets match.
  */
 export function checkBracket(str) {
-	var open = 0;
-	var close = 0;
-	var ok = true;
-    for(var i=0; i<str.length; i++) {
+	let open = 0;
+	let close = 0;
+	let ok = true;
+    for(let i=0; i<str.length; i++) {
 		switch (str[i]) {
 			case '[': open++; break;
 			case ']': close++; break;
