@@ -1,4 +1,6 @@
+import { BracketReplace } from "./BracketReplace.js";
 import { NuxCleanupBase } from "./NuxCleanupBase.js";
+import { checkBracket } from "./check.js";
 import { cleanerLinks } from "./sk/cleanerLinks.js";
 
 const SUMMARY = 'Zmiana <center> na {{center}}. Prośba by Swampl';
@@ -38,15 +40,29 @@ export async function fixCenter(bot) {
 export function fixes(text) {
 	text = cleanerLinks(text);
 
+	// zepsute tagi w plikach, np.:
 	// [[Plik:Colcoca01.jpg|mały|<center>Krzew koki]]
-	text = text.replace(/(\[\[[^\]]+?)<center>([^\]]+)/g, function(a, pre, inner){
-		inner = inner.replace(/<\/?center\/?>/, '');
-		return pre + `{{center|${inner}}}`;
-	});
-	// <center>Janusz Steinhoff</center>
+	// [[Plik:Janusz Steinhoff.jpg|mały|<center>Janusz Steinhoff<center/>]]
+	let from = "[[Plik:";
+	let replaceAction = (file) => {
+		let start = file.indexOf('<center');
+		if (start < 0) {
+			return file;
+		}
+		let pre = file.substring(0, start);
+		let inner = file.substring(start, file.length - 2);
+		inner = inner.replace(/<\/?center\/?>/g, '');
+		return `${pre}{{center|${inner}}}]]`;
+	}
+	let helper = new BracketReplace(text, from, replaceAction);
+	text = helper.exec();
+
+	// <center>Jakiś wikikod</center>
 	text = text.replace(/<center>([\s\S]+?)<\/center>/g, function(a, inner){
 		// spr. zamykające i otwierające linki
-		
+		if (!checkBracket(inner).ok) {
+			return a;
+		}
 		return `{{center|${inner}}}`;
 	});
 

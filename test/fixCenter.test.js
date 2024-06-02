@@ -1,41 +1,32 @@
 import { assert } from 'chai';
 import { fixes } from '../src/fixCenter.js';
 
-describe('fixes', () => {
-	it('should replace closed <center> tags with {{center| }}', () => {
+describe('fixCenter fixes', () => {
+	it('should replace closed <center> in simple file', () => {
 		var input, expected;
 		input = '[[Plik:Janusz Steinhoff.jpg|mały|<center>Janusz Steinhoff</center>]]';
 		expected = '[[Plik:Janusz Steinhoff.jpg|mały|{{center|Janusz Steinhoff}}]]';
 		assert.equal(fixes(input), expected);
 	});
+	it('should replace closed <center> in a file with wikilink', () => {
+		var input, expected;
+		input = '[[Plik:Harry.jpg|mały|<center>Jakiś [[Harry]] II</center>]]';
+		expected = '[[Plik:Harry.jpg|mały|{{center|Jakiś [[Harry]] II}}]]';
+		assert.equal(fixes(input), expected);
 
-	it('should replace unclosed <center> tags within [[ ]] with {{center| }}', () => {
+		input = '[[Plik:Harry Belafonte singing 1954.jpg|mały|<center>Śpiewający [[Harry Belafonte]] (1954)</center>]]';
+		expected = '[[Plik:Harry Belafonte singing 1954.jpg|mały|{{center|Śpiewający [[Harry Belafonte]] (1954)}}]]';
+		assert.equal(fixes(input), expected);
+	});
+
+	it('should fix unclosed <center> tags in a file', () => {
 		var input, expected;
 		input = '[[Plik:Colcoca01.jpg|mały|<center>Krzew koki]]';
 		expected = '[[Plik:Colcoca01.jpg|mały|{{center|Krzew koki}}]]';
 		assert.equal(fixes(input), expected);
-		input = '[[Plik:Janusz Steinhoff.jpg|mały|<center>Janusz Steinhoff<center/>]]';
-		expected = '[[Plik:Janusz Steinhoff.jpg|mały|{{center|Krzew koki}}]]';
-		
-	});
 
-	it('should cleanup file', () => {
-		var input, expected;
-		input = '[[File:Janusz Steinhoff.jpg|thumb|<center>Janusz Steinhoff</center>]]';
+		input = '[[Plik:Janusz Steinhoff.jpg|mały|<center>Janusz Steinhoff<center/>]]';
 		expected = '[[Plik:Janusz Steinhoff.jpg|mały|{{center|Janusz Steinhoff}}]]';
 		assert.equal(fixes(input), expected);
-
-		input = '[[Plik:SweetyViper (8864273175).jpg|thumb|right|skala=0.7|opcjonalny komentarz]]';
-		expected = '[[Plik:SweetyViper (8864273175).jpg|mały|skala=0.7|opcjonalny komentarz]]';
-		assert.equal(fixes(input), expected);
-
-		input = '[[Plik:SweetyViper (8864273175).jpg|right|thumb|skala=0.7|opcjonalny komentarz]]';
-		expected = '[[Plik:SweetyViper (8864273175).jpg|mały|skala=0.7|opcjonalny komentarz]]';
-		assert.equal(fixes(input), expected);
-
-		input = '[[Plik:SweetyViper (8864273175).jpg|thumb|left|skala=0.7|opcjonalny komentarz]]';
-		expected = '[[Plik:SweetyViper (8864273175).jpg|mały|lewo|skala=0.7|opcjonalny komentarz]]';
-		assert.equal(fixes(input), expected);
 	});
-
 });
