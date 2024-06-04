@@ -46,7 +46,7 @@ export function fixes(text) {
 	// en
 	change.run(SUMMARY, ()=>change.text.replace('{{DISPLAYTITLE:{{J|en|{{PAGENAME}}}}}}', '{{Język tytułu}}'));
 	// other
-	change.run(SUMMARY, ()=>change.text.replace(/\{\{DISPLAYTITLE:\{\{J\|(\w+)\|\{\{PAGENAME\}\}\}\}\}\}/, '{{Język tytułu|$1}}'));
+	change.run(SUMMARY, ()=>change.text.replace(/\{\{DISPLAYTITLE:\{\{[JK]\|([\w\-]+)\|\{\{PAGENAME\}\}\}\}\}\}/, '{{Język tytułu|$1}}'));
 
 	return change;
 }
@@ -62,6 +62,8 @@ function test(text) {
 function tests() {
 	test(`{{DISPLAYTITLE:{{J|en|{{PAGENAME}}}}}} {{dopracować|przypisy=2021-02}}`);
 	test(`{{DISPLAYTITLE:{{J|fr|{{PAGENAME}}}}}} {{dopracować|przypisy=2021-02}}`);
+	test(`{{DISPLAYTITLE:{{J|en-US|{{PAGENAME}}}}}} {{Ujednoznacznienie}}`);
+	test(`{{DISPLAYTITLE:{{K|en-US|{{PAGENAME}}}}}} {{Ujednoznacznienie}}`);
 	test(`{{DISPLAYTITLE:minix}} {{dopracować|przypisy=2021-02}}`);
 }
-// tests();
+tests();
