@@ -17,6 +17,7 @@ export async function fixTitleLang(bot) {
 		action: "query",
 		list: "search",
 		srsearch: `insource:"DISPLAYTITLE" insource:/\\{\\{DISPLAYTITLE[^}]+PAGENAME\\}\\}/`,
+		srsort: 'create_timestamp_desc',
 		srprop: '',	// less info
 		format: "json",		
 	};
@@ -41,7 +42,7 @@ export async function fixTitleLang(bot) {
 
 export function fixes(text) {
 	let change = new SkChange(text);
-	change.run('cleanerLinks', ()=>cleanerLinks(change.text));
+	change.run('SK:cleanerLinks', ()=>cleanerLinks(change.text));
 
 	// en
 	change.run(SUMMARY, ()=>change.text.replace('{{DISPLAYTITLE:{{J|en|{{PAGENAME}}}}}}', '{{Język tytułu}}'));
@@ -66,4 +67,4 @@ function tests() {
 	test(`{{DISPLAYTITLE:{{K|en-US|{{PAGENAME}}}}}} {{Ujednoznacznienie}}`);
 	test(`{{DISPLAYTITLE:minix}} {{dopracować|przypisy=2021-02}}`);
 }
-tests();
+// tests();
