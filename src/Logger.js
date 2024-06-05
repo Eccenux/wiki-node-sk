@@ -12,7 +12,7 @@ export class Logger {
 	}
 
 	log(...args) {
-		const message = this._formatMessage('LOG', ...args);
+		const message = this._formatMessage('', ...args);
 		console.log(...args);
 		this._writeToFile(message);
 	}
@@ -38,7 +38,8 @@ export class Logger {
 
 	/** @private Formatting arguments to string. */
 	_formatMessage(level, ...args) {
-		return `${level}: ${args.map(v=> typeof v ==='string' ? v : JSON.stringify(v)).join(' ')}`;
+		let message = level.length ? `${level}: ` : '';
+		return message + args.map(v=> typeof v ==='string' ? v : JSON.stringify(v)).join(' ');
 	}	
 
 	/** @private Startup info. */

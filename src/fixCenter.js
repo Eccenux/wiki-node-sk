@@ -23,7 +23,7 @@ export async function fixCenter(bot) {
 		list: "search",
 		srsearch: "insource:/\\<center/",
 		srsort: 'create_timestamp_desc',
-		srlimit: 50,
+		srlimit: 50, // per page
 		srprop: '',	// less info
 		format: "json",
 	};
@@ -42,7 +42,7 @@ export async function fixCenter(bot) {
 			}
 		}
 
-		throw "break";
+		// throw "break";
 	}
 	await bot.search(query, action);
 }
