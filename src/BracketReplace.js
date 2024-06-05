@@ -56,9 +56,6 @@ export class BracketReplace {
 			}
 			this.result += res;
 			this.lastEnd = end;
-		} else if (this.changes > 0) {
-			this.result += inner;
-			this.lastEnd = end;
 		}
 		this.index = end;
 	}

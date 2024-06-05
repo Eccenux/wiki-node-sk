@@ -29,4 +29,24 @@ describe('fixCenter fixes', () => {
 		expected = '[[Plik:Janusz Steinhoff.jpg|mały|{{center|Janusz Steinhoff}}]]';
 		assert.equal(fixes(input).text, expected);
 	});
+
+	it('should append between changed-unchanged', () => {
+		let text = `
+			[[Plik:Famous mouse (3463764209).jpg|mały|<center>Myszka Miki</center>]]
+			'''[[w:Myszka Miki|Myszka Miki]]''' – fikcyjna postać z filmów animowanych i komiksów, stworzona w studiu Walta Disneya, po odebraniu wytwórni Disneya praw do Królika Oswalda; antropomorficzna mysz.
+			[[Plik:Mickey Mouse title.png|mały|Logo Myszki Miki]]
+		`.replace(/\n\t+/g, '\n');
+		let expected = text.replace(`<center>Myszka Miki</center>`, `{{center|Myszka Miki}}`);
+
+		let change = fixes(text);
+		if (change.ismodfied()) {
+			// const summary = change.summary();
+			assert.equal(change.initialText, text);
+			assert.equal(change.text, expected);
+			const sizeDiff = change.sizeDiff();
+			assert.isTrue(sizeDiff < 0, `change: ${sizeDiff}`);
+		} else {
+			assert.fail('no change');
+		}
+	});
 });

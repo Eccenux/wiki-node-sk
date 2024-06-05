@@ -15,6 +15,14 @@ export class SkChange {
 	ismodfied() {
 		return this.initialText != this.text;
 	}
+	/** @returns {Number} Difference in text size (characters). */
+	sizeDiff() {
+		return this.text.length - this.initialText.length;
+	}
+	/** @returns {Number} Absolute difference in text size (characters). */
+	sizeDiffAbs() {
+		return Math.abs(this.sizeDiff());
+	}
 	/** @returns summaries */
 	summary(unique = true) {
 		if (unique) {

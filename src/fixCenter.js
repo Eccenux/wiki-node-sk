@@ -35,7 +35,12 @@ export async function fixCenter(bot) {
 			let change = fixes(text);
 			if (change.ismodfied()) {
 				const summary = change.summary();
-				logger.info(`${title}: ${summary}`);
+				const sizeDiff = change.sizeDiff();
+				if (Math.abs(sizeDiff) > 15) {
+					logger.warn(`[!] ${title} [${sizeDiff}]: ${summary}`);
+				} else {
+					logger.info(`${title} [${sizeDiff}]: ${summary}`);
+				}
 				await bot.save(title, change.text, summary);
 			} else {
 				logger.warn({title, s:'no change'});
