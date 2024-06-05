@@ -4,3 +4,4 @@
 .priv
 *.priv.*
 bot.config.*
+/io

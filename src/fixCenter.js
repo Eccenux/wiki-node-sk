@@ -15,6 +15,7 @@ const SUMMARY = 'zastosowanie [[Szablon:center|]]';
  * @param {NuxCleanupBase} bot 
  */
 export async function fixCenter(bot) {
+	let logger = bot.logger;
 	// https://www.mediawiki.org/wiki/API:Search
 	// https://pl.wikiquote.org/wiki/Specjalna:%C5%9Arodowisko_testowe_API#action=query&format=json&list=search&formatversion=2&srsearch=insource%3A%2F%5C%3Ccenter%2F&srprop=&srsort=create_timestamp_desc
 	let query = {
@@ -27,7 +28,7 @@ export async function fixCenter(bot) {
 	};
 	let action = async (response, batchNo) => {
 		let pages = Object.values(response.query.search).map(v=>v.title);
-		console.log(`batch [${batchNo}]:`, pages);
+		logger.log(`batch [${batchNo}]:`, pages);
 		for (let title of pages) {
 			let text = await bot.readText(title);
 			let change = fixes(text);
@@ -35,8 +36,9 @@ export async function fixCenter(bot) {
 				await bot.save(title, change.text, change.summary());
 				// break;
 			} else {
-				console.warn({title, s:'no change'});
+				logger.warn({title, s:'no change'});
 			}
+			break;
 		}
 
 		throw "break";

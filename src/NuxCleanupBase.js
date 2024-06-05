@@ -1,6 +1,7 @@
 import { Mwn } from 'mwn';
 
 import * as botpass from '../bot.config.mjs';
+import { Logger } from './Logger.js';
 
 /**
  * Bot base.
@@ -11,8 +12,12 @@ export class NuxCleanupBase {
 		this.apiUrl = `https://${this.site}/w/api.php`;
 	}
 
-	/** Init bot. */
-	async init() {
+	/**
+	 * Init bot.
+	 * @param {Logger} logger 
+	 */
+	async init(logger) {
+		this.logger = logger;
 		this.mwn = await Mwn.init({
 			apiUrl: this.apiUrl,
 			username: botpass.username,
@@ -29,7 +34,7 @@ export class NuxCleanupBase {
 	
 		Object.keys(query).forEach(key => url.searchParams.append(key, query[key]));
 	
-		console.log(url.toString().replace('?', '#'));
+		this.logger.log(url.toString().replace('?', '#'));
 	}
 
 	/** Search for pages and run action on each portion. */
@@ -44,7 +49,7 @@ export class NuxCleanupBase {
 				// pages = pages.concat(portion);
 			}
 		} catch (error) {
-			console.error('Error searching articles:', error);
+			this.logger.error('Error searching articles:', error);
 		}
 	}
 	/** Read page contents. */
