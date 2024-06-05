@@ -66,8 +66,10 @@ export class Logger {
 	}
 }
 
+/**
+ * Usage example.
+ */
 function test () {
-	// Usage example
 	const append = false;
 	const logger = new Logger('./io/logger-test.txt', append);
 	logger.log('This is a log message');

@@ -12,30 +12,34 @@ const SUMMARY = 'Zastosowanie [[Szablon:Język tytułu]]';
  * @param {NuxCleanupBase} bot 
  */
 export async function fixTitleLang(bot) {
+	let logger = bot.logger;
+
 	// https://www.mediawiki.org/wiki/API:Search
 	let query = {
 		action: "query",
 		list: "search",
 		srsearch: `insource:"DISPLAYTITLE" insource:/\\{\\{DISPLAYTITLE[^}]+PAGENAME\\}\\}/`,
 		srsort: 'create_timestamp_desc',
+		srlimit: 20, // per page
 		srprop: '',	// less info
 		format: "json",		
 	};
 	let action = async (response, batchNo) => {
 		let pages = Object.values(response.query.search).map(v=>v.title);
-		console.log(`batch [${batchNo}]:`, pages);
+		logger.log(`batch [${batchNo}]:`, pages);
 		for (let title of pages) {
 			let text = await bot.readText(title);
 			let change = fixes(text);
 			if (change.ismodfied()) {
-				await bot.save(title, change.text, change.summary());
-				// break;
+				const summary = change.summary();
+				logger.info(`${title}: ${summary}`);
+				await bot.save(title, change.text, summary);
 			} else {
-				console.warn({title, s:'no change'});
+				logger.warn({title, s:'no change'});
 			}
 		}
 
-		// throw "break";
+		throw "break";
 	}
 	await bot.search(query, action);
 }
@@ -52,6 +56,9 @@ export function fixes(text) {
 	return change;
 }
 
+/**
+ * Usage example.
+ */
 function test(text) {
 	let change = fixes(text);
 	if (change.ismodfied()) {

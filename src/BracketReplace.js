@@ -80,6 +80,9 @@ export class BracketReplace {
 	}
 }
 
+/**
+ * Usage example.
+ */
 function test() {
 	var str = `
 [[Plik:Abc.jpg]][[Plik:Def.jpg]]
