@@ -23,6 +23,7 @@ export async function fixCenter(bot) {
 		list: "search",
 		srsearch: "insource:/\\<center/",
 		srsort: 'create_timestamp_desc',
+		srlimit: 50,
 		srprop: '',	// less info
 		format: "json",
 	};
@@ -64,7 +65,7 @@ export function fixes(text) {
 		inner = inner.replace(/<\/?center\/?>/g, '');
 		return `${pre}{{center|${inner}}}]]`;
 	}
-	let helper = new BracketReplace(text, from, replaceAction);
+	let helper = new BracketReplace(change.text, from, replaceAction);
 	change.run(SUMMARY, ()=>helper.exec());
 
 	// <center>Jakiś wikikod</center>
