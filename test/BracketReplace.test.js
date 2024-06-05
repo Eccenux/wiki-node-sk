@@ -36,5 +36,17 @@ describe('BracketReplace', () => {
 		const expected = 'abc';
 		test(input, expected, ()=>'');
 	});
+
+	it('should preserve for nop', () => {
+		const input = '[[Plik:example.jpg]]abc[[Plik:example2.jpg]]';
+		const expected = input;
+		test(input, expected, (inner)=>inner);
+	});
+
+	it('should preserve unmatched parts', () => {
+		const input = '[[Plik:example.jpg]]abc[[Plik:example2.jpg]]';
+		const expected = '[[Plik:example.jpg]]abc[[Plik:example002.jpg]]';
+		test(input, expected, (inner)=>inner.replace(/example([0-9])/, 'example00$1'));
+	});
 });
 

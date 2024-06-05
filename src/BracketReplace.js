@@ -56,8 +56,11 @@ export class BracketReplace {
 			}
 			this.result += res;
 			this.lastEnd = end;
-			this.index = end;
+		} else if (this.changes > 0) {
+			this.result += inner;
+			this.lastEnd = end;
 		}
+		this.index = end;
 	}
 
 	/** Run replacement actions. */
@@ -77,17 +80,19 @@ export class BracketReplace {
 	}
 }
 
-/**
-var str = `
+function test() {
+	var str = `
 [[Plik:Abc.jpg]][[Plik:Def.jpg]]
 Abc, [[def]].
 
-[[Plik:Xyz.jpg|mały|Test [[kopytko]].]]
+[[Plik:Xyz.png|mały|Test [[kopytko]].]]
 Xyz.
-`;
-var from = `[[Plik:`;
-var replaceAction = (inner)=>inner.replace('.jpg', '.png')+';';
-var helper = new BracketReplace(str, from, replaceAction);
-var result = helper.exec();
-console.log(result);
-/**/
+	`;
+	var from = `[[Plik:`;
+	// var replaceAction = (inner)=>inner.replace('.jpg', '.png')+';';
+	var replaceAction = (inner)=>inner.replace('.png', '.svg');
+	var helper = new BracketReplace(str, from, replaceAction);
+	var result = helper.exec();
+	console.log(result);
+}
+// test();

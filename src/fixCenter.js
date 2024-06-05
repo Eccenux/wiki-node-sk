@@ -4,7 +4,7 @@ import { SkChange } from "./SkChange.js";
 import { checkBracket } from "./check.js";
 import { cleanerLinks } from "./sk/cleanerLinks.js";
 
-const SUMMARY = 'zastosowanie [[Szablon:center|]]';
+const SUMMARY = 'zastosowanie [[Szablon:center|center]]';
 
 /**
  * Zmiana <center> na {{center}}. Prośba by Swampl.
@@ -33,12 +33,12 @@ export async function fixCenter(bot) {
 			let text = await bot.readText(title);
 			let change = fixes(text);
 			if (change.ismodfied()) {
-				await bot.save(title, change.text, change.summary());
-				// break;
+				const summary = change.summary();
+				logger.info(`${title}: ${summary}`);
+				await bot.save(title, change.text, summary);
 			} else {
 				logger.warn({title, s:'no change'});
 			}
-			break;
 		}
 
 		throw "break";
