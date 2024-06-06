@@ -16,14 +16,19 @@ const SUMMARY = 'zastosowanie [[Szablon:center|center]]';
  */
 export async function fixCenter(bot) {
 	let logger = bot.logger;
+
+	let warns = [];
+	let saved = 0;
+
 	// https://www.mediawiki.org/wiki/API:Search
 	// https://pl.wikiquote.org/wiki/Specjalna:%C5%9Arodowisko_testowe_API#action=query&format=json&list=search&formatversion=2&srsearch=insource%3A%2F%5C%3Ccenter%2F&srprop=&srsort=create_timestamp_desc
 	let query = {
 		action: "query",
 		list: "search",
 		srsearch: "insource:/\\<center/",
+		srnamespace: 0,
 		srsort: 'create_timestamp_desc',
-		srlimit: 50, // per page
+		srlimit: 50, // per batch
 		srprop: '',	// less info
 		format: "json",
 	};
@@ -38,18 +43,30 @@ export async function fixCenter(bot) {
 				const sizeDiff = change.sizeDiff();
 				if (Math.abs(sizeDiff) > 15) {
 					logger.warn(`[!] ${title} [${sizeDiff}]: ${summary}`);
+					warns.push(`[!] ${title} [${sizeDiff}]: ${summary}`);
 				} else {
 					logger.info(`${title} [${sizeDiff}]: ${summary}`);
 				}
-				await bot.save(title, change.text, summary);
+				try {
+					await bot.save(title, change.text, summary);
+					saved++;
+				} catch (error) {
+					logger.error(`Error saving: ${title} (maybe try later or as admin?)`, {code:error?.code, info:error?.info, message:error?.message});
+					warns.push(`Error saving: ${title} [${sizeDiff}]`);
+				}
 			} else {
-				logger.warn({title, s:'no change'});
+				// logger.warn({title, s:'no change'});
 			}
 		}
 
 		// throw "break";
 	}
 	await bot.search(query, action);
+
+	if (warns.length > 0) {
+		logger.warn(`Warnings: [${warns.length}], e.g.: ${warns[0]}`);
+	}
+	logger.log(`Done (saved: ${saved}).`);
 }
 
 export function fixes(text) {
