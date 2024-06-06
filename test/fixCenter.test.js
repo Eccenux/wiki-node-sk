@@ -7,6 +7,10 @@ describe('fixCenter fixes', () => {
 		input = '[[Plik:Janusz Steinhoff.jpg|mały|<center>Janusz Steinhoff</center>]]';
 		expected = '[[Plik:Janusz Steinhoff.jpg|mały|{{center|Janusz Steinhoff}}]]';
 		assert.equal(fixes(input).text, expected);
+
+		input = '[[Plik:Janusz Steinhoff.jpg|mały|<Center>Janusz Steinhoff</center>]]';
+		expected = '[[Plik:Janusz Steinhoff.jpg|mały|{{center|Janusz Steinhoff}}]]';
+		assert.equal(fixes(input).text, expected);
 	});
 	it('should replace closed <center> in a file with wikilink', () => {
 		var input, expected;

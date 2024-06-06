@@ -25,7 +25,7 @@ export async function fixCenter(bot) {
 	let query = {
 		action: "query",
 		list: "search",
-		srsearch: "insource:/\\<center/",
+		srsearch: "insource:/\\<[cC]enter/",
 		srnamespace: 0,
 		srsort: 'create_timestamp_desc',
 		srlimit: 50, // per batch
@@ -78,20 +78,20 @@ export function fixes(text) {
 	// [[Plik:Janusz Steinhoff.jpg|mały|<center>Janusz Steinhoff<center/>]]
 	let from = "[[Plik:";
 	let replaceAction = (file) => {
-		let start = file.indexOf('<center');
+		let start = file.search(/<center/i);
 		if (start < 0) {
 			return file;
 		}
 		let pre = file.substring(0, start);
 		let inner = file.substring(start, file.length - 2);
-		inner = inner.replace(/<\/?center\/?>/g, '');
+		inner = inner.replace(/<\/?center\/?>/gi, '');
 		return `${pre}{{center|${inner}}}]]`;
 	}
 	let helper = new BracketReplace(change.text, from, replaceAction);
 	change.run(SUMMARY, ()=>helper.exec());
 
 	// <center>Jakiś wikikod</center>
-	change.run(SUMMARY, ()=>change.text.replace(/<center>([\s\S]+?)<\/center>/g, function(a, inner){
+	change.run(SUMMARY, ()=>change.text.replace(/<[cC]enter>([\s\S]+?)<\/[cC]enter>/g, function(a, inner){
 		// spr. zamykające i otwierające linki
 		if (!checkBracket(inner).ok) {
 			return a;
