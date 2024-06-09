@@ -4,12 +4,12 @@ import { fixCenter } from "./fixCenter.js";
 import { fixTitleLang } from "./fixTitleLang.js";
 
 // Site
-const site = 'pl.wikiquote.org';
-// const site = 'pl.wikipedia.org';
+// const site = 'pl.wikiquote.org';
+const site = 'pl.wikipedia.org';
 const bot = new NuxCleanupBase(site);
 
 // Log file
-const logger = new Logger('./io/wc_center.tex');
+const logger = new Logger('./io/wp_TitleLang.tex');
 
 // Run the search
 (async () => {
@@ -18,8 +18,8 @@ const logger = new Logger('./io/wc_center.tex');
 	//
 	// Fixes (search & change)
 	//
-	await fixCenter(bot);
-	// await fixTitleLang(bot);
+	// await fixCenter(bot);
+	await fixTitleLang(bot);
 	
 	logger.log('Done');
 	

@@ -18,7 +18,9 @@ export async function fixTitleLang(bot) {
 	let query = {
 		action: "query",
 		list: "search",
-		srsearch: `insource:"DISPLAYTITLE" insource:/\\{\\{DISPLAYTITLE[^}]+PAGENAME\\}\\}/`,
+		// srsearch: `insource:"DISPLAYTITLE" insource:/\\{\\{DISPLAYTITLE[^}]+PAGENAME\\}\\}/`,
+		srsearch: `insource:"DISPLAYTITLE" insource:` + /\{\{J\|[a-z]+\|\{\{PAGENAME\}\}/.toString(),
+		srnamespace: 0,
 		srsort: 'create_timestamp_desc',
 		srlimit: 20, // per page
 		srprop: '',	// less info
@@ -47,7 +49,9 @@ export async function fixTitleLang(bot) {
 export function fixes(text) {
 	let change = new SkChange(text);
 	change.run('SK:cleanerLinks', ()=>cleanerLinks(change.text));
-
+	
+	// useless namespace check
+	change.run(SUMMARY, ()=>change.text.replace('{{#if:{{NAMESPACE}}|{{NAMESPACE}}:|}}', ''));
 	// en
 	change.run(SUMMARY, ()=>change.text.replace('{{DISPLAYTITLE:{{J|en|{{PAGENAME}}}}}}', '{{Język tytułu}}'));
 	// other
