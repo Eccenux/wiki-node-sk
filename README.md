@@ -1,8 +1,8 @@
-# wiki-jsbot-sk-cleanup
+# node-sk
 
 Code cleanup of various Wikimedia projects via API with NodeJS.
 
-Experiments of porting sk.js to NodeJS... Maybe.
+Experiments of porting wp_sk.js ([WP:SK](https://pl.wikipedia.org/wiki/Wikiprojekt:Sprz%C4%85tanie_kodu)) to NodeJS... Maybe.
 
 ## Table of Contents
 
