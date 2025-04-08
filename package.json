@@ -17,12 +17,12 @@
 	"type": "module",
 	"dependencies": {
 		"axios": "0.x",
-		"eslint": "^9.3.0",
-		"mwn": "2.0.x",
-		"node-fetch": "^3.3.2"
+		"eslint": "9.x",
+		"mwn": "3.0.x",
+		"node-fetch": "3.x"
 	},
 	"devDependencies": {
-		"chai": "^5.1.1",
-		"mocha": "^10.4.0"
+		"chai": "5.x",
+		"mocha": "10.x"
 	}
 }
